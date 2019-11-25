@@ -1,5 +1,4 @@
 language: go
-sudo: false
 matrix:
   include:
     # "1.x" always refers to the latest Go version, inc. the patch release.
@@ -25,5 +24,23 @@ script:
   # Disabled because there aren't any tests yet.
   # - go test -v -race ./...
   # Only build binaries from the latest Go release.
-  - if [ "${LATEST}" = "true" ]; then gox -os="linux" -arch="amd64" -output="{{.Dir}}.{{.OS}}.{{.Arch}}" -ldflags "-X main.Rev=`git rev-parse --short HEAD`" -verbose ./...; fi
-  - if [ "${LATEST}" = "true" ]; then gox -os="linux" -arch="arm64 arm" -output="{{.Dir}}.{{.OS}}.{{.Arch}}" -ldflags "-X main.Rev=`git rev-parse --short HEAD`" -verbose ./...; fi
+  - if [ "${LATEST}" = "true" ]; then gox -os="linux" -arch="amd64" -output="{{.Dir}}.{{.OS}}-{{.Arch}}" -ldflags "-X main.Rev=`git rev-parse --short HEAD`" -verbose ./...; fi
+  - if [ "${LATEST}" = "true" ]; then gox -os="linux" -arch="arm64 arm" -output="{{.Dir}}.{{.OS}}-{{.Arch}}" -ldflags "-X main.Rev=`git rev-parse --short HEAD`" -verbose ./...; fi
+
+deploy:
+  provider: releases
+  skip_cleanup: true
+  api_key:
+    # The *encrypted* GitHub key, as the output of the Travis CI CLI tool.
+    secure: "r/ATplVK5v5x/QjjZjbXuS+ZOlQxO+ZqcJlW1gFyOhd+YTuutJ/XaNzsKoPhHaPscUFOv57hFTfjflYJ3Q3rq/kgu4z73gjLFhUMd4gsUOX971ym6tMasxeoPOemHvm53g10B5nUrsItX7/QIXl6ry9FHmmqm38t4UVlnslpklDw6OLfCkWMpvM5IBtEZeFPiyUbtO9uC8bl0QPAR4UAXXJEBO8cFeDNsRtKtTjctenORECJw1bNGHeAbVDYJ7HdAMOjpIVF1NUwGZbKGACEc2NTgWUsp5YkqpB87c4+JS2D6ghx1Kbpc+s5fFow9me0F/FZ3xCguJ+0doozICCGe2Rm9ZA0wl/fkIUHeP8StaaVar8dq7QxBzTfq9EZF17RgKuZhnWhAHST7zEY6EY0caPsSKwiEiZRXHp5KTJLMi0ShvahYBaPmzV0VJa+j5oPVZO6mv7hlZzSetYqxQYHSl9dmn/9KjcEUiHyMRpQYjGr9dXQpPBiM3xVCrR8H8ouQs0/RXky2T2rIJHXD87OpNGrn2bPTEyNqEaf7rsGk83NvcRLMMNBU3cdSt3UlUm9m/rxAjE/H+0OodVP+ESB+UX9gT7wZmKeg/E4gRsqetLBUoLui8sA0F1TM4GmsCKI254T7Z+7wrbBGu/jUybsGH+kG0VzNdUSZp+TUIxQy2E="
+  file:
+    # The names of the binaries to output, based on the -output template passed to gox.
+    - p1_exporter.linux-amd64
+    - p1_exporter.linux-arm64
+    - p1_exporter.linux-arm
+  on:
+    # What to repository to build
+    repo: roaldnefs/p1_exporter
+    # Only build binaries for tagged commits
+    tags: true
+    condition: $LATEST = true
