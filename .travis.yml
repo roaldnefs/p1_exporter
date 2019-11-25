@@ -29,7 +29,7 @@ script:
 
 deploy:
   provider: releases
-  cleanup: false
+  skip_cleanup: true
   api_key:
     # The *encrypted* GitHub key, as the output of the Travis CI CLI tool.
     secure: "r/ATplVK5v5x/QjjZjbXuS+ZOlQxO+ZqcJlW1gFyOhd+YTuutJ/XaNzsKoPhHaPscUFOv57hFTfjflYJ3Q3rq/kgu4z73gjLFhUMd4gsUOX971ym6tMasxeoPOemHvm53g10B5nUrsItX7/QIXl6ry9FHmmqm38t4UVlnslpklDw6OLfCkWMpvM5IBtEZeFPiyUbtO9uC8bl0QPAR4UAXXJEBO8cFeDNsRtKtTjctenORECJw1bNGHeAbVDYJ7HdAMOjpIVF1NUwGZbKGACEc2NTgWUsp5YkqpB87c4+JS2D6ghx1Kbpc+s5fFow9me0F/FZ3xCguJ+0doozICCGe2Rm9ZA0wl/fkIUHeP8StaaVar8dq7QxBzTfq9EZF17RgKuZhnWhAHST7zEY6EY0caPsSKwiEiZRXHp5KTJLMi0ShvahYBaPmzV0VJa+j5oPVZO6mv7hlZzSetYqxQYHSl9dmn/9KjcEUiHyMRpQYjGr9dXQpPBiM3xVCrR8H8ouQs0/RXky2T2rIJHXD87OpNGrn2bPTEyNqEaf7rsGk83NvcRLMMNBU3cdSt3UlUm9m/rxAjE/H+0OodVP+ESB+UX9gT7wZmKeg/E4gRsqetLBUoLui8sA0F1TM4GmsCKI254T7Z+7wrbBGu/jUybsGH+kG0VzNdUSZp+TUIxQy2E="
