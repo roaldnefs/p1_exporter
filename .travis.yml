@@ -1,11 +1,22 @@
 language: go
+sudo: false
+matrix:
+  include:
+    # "1.x" always refers to the latest Go version, inc. the patch release.
+    # e.g. "1.x" is 1.11 until 1.11.1 is available
+    - go: 1.x
+      env: LATEST=true
+    - go: 1.10.x
+    - go: 1.11.x
+    - go: 1.12.x
+    - go: tip
+  allow_failures:
+    - go: tip
 
-go:
-  - 1.9.x
-  - 1.10.x
-  - 1.11.x
-  - 1.12.x
-  - 1.13.x
+before_install:
+  # gox simplifies building for multiple architectures
+  - go get github.com/mitchellh/gox
+  - go get github.com/inconshreveable/mousetrap
 
 script:
   - go get -t -v ./...
@@ -13,3 +24,6 @@ script:
   - go vet $(go list ./... | grep -v /vendor/)
   # Disabled because there aren't any tests yet.
   # - go test -v -race ./...
+  # Only build binaries from the latest Go release.
+  - if [ "${LATEST}" = "true" ]; then gox -os="linux darwin windows" -arch="amd64" -output="{{.Dir}}.{{.OS}}.{{.Arch}}" -ldflags "-X main.Rev=`git rev-parse --short HEAD`" -verbose ./...; fi
+  - if [ "${LATEST}" = "true" ]; then gox -os="linux" -arch="arm64 arm" -output="{{.Dir}}.{{.OS}}.{{.Arch}}" -ldflags "-X main.Rev=`git rev-parse --short HEAD`" -verbose ./...; fi
