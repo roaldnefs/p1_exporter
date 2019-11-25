@@ -25,6 +25,5 @@ script:
   # Disabled because there aren't any tests yet.
   # - go test -v -race ./...
   # Only build binaries from the latest Go release.
-  # Currently not cross compiling for Darwin: https://github.com/tarm/serial/issues/40
-  - if [ "${LATEST}" = "true" ]; then gox -os="linux windows" -arch="amd64" -output="{{.Dir}}.{{.OS}}.{{.Arch}}" -ldflags "-X main.Rev=`git rev-parse --short HEAD`" -verbose ./...; fi
+  - if [ "${LATEST}" = "true" ]; then gox -os="linux" -arch="amd64" -output="{{.Dir}}.{{.OS}}.{{.Arch}}" -ldflags "-X main.Rev=`git rev-parse --short HEAD`" -verbose ./...; fi
   - if [ "${LATEST}" = "true" ]; then gox -os="linux" -arch="arm64 arm" -output="{{.Dir}}.{{.OS}}.{{.Arch}}" -ldflags "-X main.Rev=`git rev-parse --short HEAD`" -verbose ./...; fi
